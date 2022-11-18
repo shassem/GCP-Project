@@ -3,7 +3,7 @@ resource "google_compute_router" "router" {
   region  = google_compute_subnetwork.management_subnet.region
   network = google_compute_network.myvpc.id
 }
-
+# NAT for the private VM to access the internet
 resource "google_compute_router_nat" "nat" {
   name                               = "inat"
   router                             = google_compute_router.router.name

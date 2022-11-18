@@ -24,9 +24,8 @@ resource "google_container_cluster" "primary" {
   # JENKINS
   master_authorized_networks_config {
     cidr_blocks {
-        cidr_block = "${google_compute_instance.privatevm.network_interface.0.network_ip}/32"        #Private VM Only / If activated delete dependencies from the instance 
+        cidr_block = "${google_compute_instance.privatevm.network_interface.0.network_ip}/32"        #Private VM Only / If activated comment the dependencies from the instance 
         # cidr_block = var.management_subnet      
-        display_name = "private-subnet-for-jenkins"
     }
   }
 
@@ -39,7 +38,7 @@ resource "google_container_node_pool" "primary_nodes" {
   max_pods_per_node = 30
 
   node_config {
-    preemptible  = false
+    preemptible  = false            
     machine_type = "e2-medium"
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -48,13 +47,4 @@ resource "google_container_node_pool" "primary_nodes" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
-#   management {
-#     auto_repair = true
-#     auto_upgrade = true
-#   }
-#   autoscaling {
-#     min_node_count = 0
-#     max_node_count = 6
-#   }
-
 }
