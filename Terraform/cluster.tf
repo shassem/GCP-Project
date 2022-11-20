@@ -7,38 +7,38 @@ resource "google_container_cluster" "primary" {
   # node pool and immediately delete it.
   remove_default_node_pool = true
   initial_node_count       = 1
-  network = module.network.vpc_id
-  subnetwork = module.network.restricted_subnet_id
-  
+  network                  = module.network.vpc_id
+  subnetwork               = module.network.restricted_subnet_id
+
 
   private_cluster_config {
-    enable_private_nodes = true
+    enable_private_nodes    = true
     enable_private_endpoint = true
-    master_ipv4_cidr_block = var.controlplane_cidr
+    master_ipv4_cidr_block  = var.controlplane_cidr
   }
 
   ip_allocation_policy {
-    cluster_ipv4_cidr_block = var.cluster_cidr
+    cluster_ipv4_cidr_block  = var.cluster_cidr
     services_ipv4_cidr_block = var.service_cidr
   }
   # JENKINS
   master_authorized_networks_config {
     cidr_blocks {
-        cidr_block = "${google_compute_instance.privatevm.network_interface.0.network_ip}/32"        #Private VM Only / If activated comment the dependencies from the instance 
-        # cidr_block = var.management_subnet      
+      cidr_block = "${google_compute_instance.privatevm.network_interface.0.network_ip}/32" #Private VM Only / If activated comment the dependencies from the instance 
+      # cidr_block = var.management_subnet      
     }
   }
 
 }
 
 resource "google_container_node_pool" "primary_nodes" {
-  name       = "my-node-pool"
-  cluster    = google_container_cluster.primary.id
-  node_count = var.work_nodes_no
+  name              = "my-node-pool"
+  cluster           = google_container_cluster.primary.id
+  node_count        = var.work_nodes_no
   max_pods_per_node = 30
 
   node_config {
-    preemptible  = false            
+    preemptible  = false
     machine_type = "e2-medium"
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.

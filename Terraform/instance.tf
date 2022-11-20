@@ -11,13 +11,13 @@ resource "google_compute_instance" "privatevm" {
       labels = {
         my_label = "value"
       }
-    } 
+    }
   }
 
   network_interface {
-    network = module.network.vpc_id
+    network    = module.network.vpc_id
     subnetwork = module.network.management_subnet_id
-    network_ip   = var.vmprivateip
+    network_ip = var.vmprivateip
   }
 
   service_account {
@@ -26,8 +26,8 @@ resource "google_compute_instance" "privatevm" {
     scopes = ["cloud-platform"]
   }
 
-#Installing kubectl, dockercli, git, gcloud authentication plugins
-  metadata = {                                                
+  #Installing kubectl, dockercli, git, gcloud authentication plugins
+  metadata = {
     startup-script = <<-EOF
 
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -42,9 +42,9 @@ resource "google_compute_instance" "privatevm" {
 
     EOF  
   }
-  
-  
-# depends_on --> To wait for the cluster to be created so the last commands in the metadata can work
+
+
+  # depends_on --> To wait for the cluster to be created so the last commands in the metadata can work
   # depends_on = [
   #       google_container_cluster.primary
   #   ]

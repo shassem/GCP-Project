@@ -1,6 +1,6 @@
 provider "google" {
-  project     = "gcp-project-368920"
-  region      = "us-central1"
+  project = "gcp-project-368920"
+  region  = "us-central1"
 }
 
 #To let the team work on the same terraform.tfstate file + state locking
